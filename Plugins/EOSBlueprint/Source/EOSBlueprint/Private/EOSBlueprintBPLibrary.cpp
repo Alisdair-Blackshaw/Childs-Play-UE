@@ -24,7 +24,7 @@ UEOSBlueprintBPLibrary::UEOSBlueprintBPLibrary(const FObjectInitializer& ObjectI
  UEOSBlueprintBPLibrary::localUserInfo GUserInfo;
  EOS_HAuth AuthHandle;
  EOS_HPlatform PlatformHandler = nullptr;
- EOS_UserInfo_QueryUserInfoOptions QueryUserInfoOptions = nullptr;
+ EOS_UserInfo_QueryUserInfoOptions QueryUserInfoOptions;
  
 
 
@@ -173,8 +173,8 @@ void PlayerLoginCallback(const EOS_Auth_LoginCallbackInfo* CliData)
 bool Login()
 {
 	EOS_Platform_Tick(PlatformHandler);
-	EOS_Auth_Login(PlatformHandler,PlatformOptions,this ,PlayerLoginCallback);
-	UEOSBlueprintBPLibrary::AddConnectAuthExpirationNotification();
+	//EOS_Auth_Login(PlatformHandler,PlatformOptions,this ,PlayerLoginCallback);
+	//UEOSBlueprintBPLibrary::AddConnectAuthExpirationNotification();
 	return true;
 
 }
@@ -187,7 +187,7 @@ void UEOSBlueprintBPLibrary::AddConnectAuthExpirationNotification()
 			EOS_Connect_AddNotifyAuthExpirationOptions Options{};
 			Options.ApiVersion = EOS_CONNECT_ADDNOTIFYAUTHEXPIRATION_API_LATEST;
 
-			ConnectAuthExpirationId = EOS_Connect_AddNotifyAuthExpiration(ConnectHandle, &Options, NULL, ConnectAuthExpirationCb);
+			//ConnectAuthExpirationId = EOS_Connect_AddNotifyAuthExpiration(ConnectHandle, &Options, NULL, ConnectAuthExpirationCb);
 		}
 	}
 
@@ -214,8 +214,8 @@ void UEOSBlueprintBPLibrary::getLocalUsername(FString& username)
 
 void UEOSBlueprintBPLibrary::LoggedIn_Implementation()
 {
-	EOS_UserInfo_QueryUserInfo(QueryUserInfoOptions&)
-	EOS_EpicAccountId_IsValid(localUserID)
+	//EOS_UserInfo_QueryUserInfo(QueryUserInfoOptions&);
+	//EOS_EpicAccountId_IsValid(localUserID);
 }
 
 

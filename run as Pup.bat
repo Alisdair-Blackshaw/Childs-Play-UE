@@ -1,1 +1,0 @@
-"C:\Program Files\Epic Games\UE_5.0\Engine\Binaries\Win64\UnrealEditor.exe" "C:\Users\A.Blackshaw.ADM\Documents\Unreal Projects\KidsPlay5Test\KidsPlay5Test.uproject" -game -log -customconfig=EOS -AUTH_LOGIN=localhost:6666 -AUTH_PASSWORD=Pup -AUTH_TYPE=developer
