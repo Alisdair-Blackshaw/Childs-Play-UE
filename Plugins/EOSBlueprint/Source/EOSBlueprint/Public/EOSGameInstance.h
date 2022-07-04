@@ -19,7 +19,7 @@ public:
 	UEOSGameInstance();
 	virtual void Init() override;
 	UFUNCTION(BlueprintCallable, DisplayName="Initalise Online Session")
-	void CreateSession(FString SessionName);
+	void CreateSession();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, meta=(Keywords="EOSBlueprint sample test testing"), Category="EOSBlueprintTesting")
 	void FinishedLoggingIn();

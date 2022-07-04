@@ -28,12 +28,8 @@ void UEOSGameInstance::Init()
 	Login();
 }
 
-void UEOSGameInstance::CreateSession(FString SessionName)
+void UEOSGameInstance::CreateSession()
 {
-if(SessionName == "")
-{
-	SessionName = "Name your session!";
-}
 	if( bIsLoggedIn)
 	{
 		if(OnlineSubsystem)
