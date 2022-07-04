@@ -3,9 +3,7 @@
 
 #include "EOSGameInstance.h"
 
-#include <eos_auth.h>
 
-#include "EOSBlueprintBPLibrary.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 #include "Interfaces/OnlineSessionInterface.h"
@@ -159,20 +157,7 @@ void UEOSGameInstance::OnLoginComplete(int32 LocalUserNum, bool bWasSuccessful, 
 	
 }
 
-FString UEOSGameInstance::LocalPlayerName()
-{
-	if(OnlineSubsystem && bIsLoggedIn)
-	{
-		if (IOnlineSessionPtr SessionPtr = OnlineSubsystem-> GetSessionInterface())
-		{
-			if (OnlineSubsystem->GetSubsystemName() == "Epic")
-			{
-				//EOS_UserInfo.
-			}
-		}
-	}
-	return "NULL";
-}
+
 
 void UEOSGameInstance::OnCreateSessionsComplete(FName SessionName, bool bWasSuccessful)
 {
@@ -188,4 +173,55 @@ void UEOSGameInstance::OnCreateSessionsComplete(FName SessionName, bool bWasSucc
 	}	
 }
 
+FString UEOSGameInstance::LocalPlayerName()
+{
+	if(OnlineSubsystem && bIsLoggedIn)
+	{
+		if (IOnlineSessionPtr SessionPtr = OnlineSubsystem-> GetSessionInterface())
+		{
+			if (OnlineSubsystem->GetSubsystemName() == "Epic")
+			{
+				//EOS_UserInfo.
+			}
+		}
+	}
+	return "NULL";
+}
 
+void UEOSGameInstance::FindSessions()
+{
+	if( bIsLoggedIn)
+	{
+		if(OnlineSubsystem)
+		{
+			if(IOnlineSessionPtr SessionPtr = OnlineSubsystem-> GetSessionInterface())
+			{
+
+				SearchSettings = MakeShareable(new FOnlineSessionSearch());
+				SearchSettings->QuerySettings.Set(SEARCH_KEYWORDS,FString("tmp"), EOnlineComparisonOp::Equals);
+				SearchSettings->QuerySettings.Set(SEARCH_LOBBIES,true, EOnlineComparisonOp::Equals);
+				SearchSettings->MaxSearchResults = 50;
+
+
+
+				SessionPtr->OnFindSessionsCompleteDelegates.AddUObject(this, &UEOSGameInstance::OnFindSessionsComplete);
+				SessionPtr->FindSessions(0,SearchSettings.ToSharedRef());
+			}
+		}
+	}
+}
+
+void UEOSGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Success: %d"), bWasSuccessful);
+
+	if(bWasSuccessful)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Found %d  Lobbies"), SearchSettings->SearchResults.Num());
+			
+		}
+	if(IOnlineSessionPtr SessionPtr = OnlineSubsystem->GetSessionInterface())
+	{
+		SessionPtr->ClearOnFindSessionsCompleteDelegates(this);
+	}
+}

@@ -43,6 +43,11 @@ public:
 	
 	UFUNCTION(BlueprintPure, meta=(Keywords="EOSBlueprint sample test testing"), Category="EOSBlueprintTesting")
 	FString LocalPlayerName();
+
+UFUNCTION(BlueprintCallable, Category="EOSBlueprintTesting")
+	void FindSessions();
+	void OnFindSessionsComplete(bool bWasSuccessful);
+	TSharedPtr<FOnlineSessionSearch> SearchSettings;
 	
 protected:
 	class IOnlineSubsystem* OnlineSubsystem;
