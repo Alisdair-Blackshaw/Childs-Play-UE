@@ -4,8 +4,8 @@
 
 #include <eos_userinfo.h>
 
-#include "G:\Unreal Engine\Engine\Source\ThirdParty\EOSSDK\SDK\Include\eos_sdk.h"
-#include "G:\Unreal Engine\Engine\Source\ThirdParty\EOSSDK\SDK\Include\eos_common.h"
+#include <eos_sdk.h>
+#include <eos_common.h>
 #include "EOSBlueprint.h"
 #include "eos_auth.h"
 #include "eos_init.h"

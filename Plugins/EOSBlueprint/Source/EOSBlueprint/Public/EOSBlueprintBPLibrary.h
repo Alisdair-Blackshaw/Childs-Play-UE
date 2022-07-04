@@ -2,9 +2,8 @@
 
 #pragma once
 
-#include "G:\Unreal Engine\Engine\Source\ThirdParty\EOSSDK\SDK\Include\eos_sdk.h"
-#include "G:\Unreal Engine\Engine\Source\ThirdParty\EOSSDK\SDK\Include\eos_common.h"
-#include "C:\Users\alisd\Desktop\EOS SDK\Samples\Shared\Source\Utils\StringUtils.h"
+#include <eos_common.h>
+
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "EOSBlueprintBPLibrary.generated.h"
 
