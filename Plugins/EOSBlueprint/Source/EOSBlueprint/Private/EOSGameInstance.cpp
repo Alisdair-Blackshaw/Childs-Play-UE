@@ -5,6 +5,7 @@
 
 #include <eos_auth.h>
 
+#include "EOSBlueprintBPLibrary.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 #include "Interfaces/OnlineSessionInterface.h"
@@ -153,13 +154,23 @@ void UEOSGameInstance::OnLoginComplete(int32 LocalUserNum, bool bWasSuccessful, 
 		{
 			Identity->ClearOnLoginCompleteDelegates(0, this);
 		}
-		CreateSession("Just Waiting");
+		//CreateSession("Just Waiting");
 	}
 	
 }
 
 FString UEOSGameInstance::LocalPlayerName()
 {
+	if(OnlineSubsystem && bIsLoggedIn)
+	{
+		if (IOnlineSessionPtr SessionPtr = OnlineSubsystem-> GetSessionInterface())
+		{
+			if (OnlineSubsystem->GetSubsystemName() == "Epic")
+			{
+				//EOS_UserInfo.
+			}
+		}
+	}
 	return "NULL";
 }
 
