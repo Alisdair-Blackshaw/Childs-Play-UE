@@ -9,6 +9,7 @@
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
 #include "Interfaces/OnlineIdentityInterface.h"
+#include "Kismet/GameplayStatics.h"
 
 //TODO core routines investigation
 
@@ -216,12 +217,44 @@ void UEOSGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 	UE_LOG(LogTemp, Warning, TEXT("Success: %d"), bWasSuccessful);
 
 	if(bWasSuccessful)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Found %d  Lobbies"), SearchSettings->SearchResults.Num());
-			
-		}
-	if(IOnlineSessionPtr SessionPtr = OnlineSubsystem->GetSessionInterface())
 	{
-		SessionPtr->ClearOnFindSessionsCompleteDelegates(this);
+		UE_LOG(LogTemp, Warning, TEXT("Found %d  Lobbies"), SearchSettings->SearchResults.Num());
+		if(OnlineSubsystem)
+		{
+			if(IOnlineSessionPtr SessionPtr = OnlineSubsystem-> GetSessionInterface())
+			{
+				if(SearchSettings->SearchResults.Num())
+				{
+					SessionPtr->OnJoinSessionCompleteDelegates.AddUObject(this,&UEOSGameInstance::OnJoinSessionComplete);
+					SessionPtr->JoinSession(0,FName("KidsPlaySession"),SearchSettings->SearchResults[0]);
+
+				}
+			}
+		}
+		if(IOnlineSessionPtr SessionPtr = OnlineSubsystem->GetSessionInterface())
+		{
+			SessionPtr->ClearOnFindSessionsCompleteDelegates(this);
+		}
+
+	
+	}
+}
+
+void UEOSGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+{
+	if(OnlineSubsystem)
+	{
+		if(IOnlineSessionPtr SessionPtr = OnlineSubsystem->GetSessionInterface())
+		{
+			FString ConnectionInfo = FString();
+			SessionPtr->GetResolvedConnectString(SessionName,ConnectionInfo);
+			if(!ConnectionInfo.IsEmpty())
+			{
+				if(APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(),0))
+				{
+					PC->ClientTravel(ConnectionInfo, ETravelType::TRAVEL_Absolute);
+				}
+			}
+		}
 	}
 }

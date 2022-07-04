@@ -48,7 +48,8 @@ UFUNCTION(BlueprintCallable, Category="EOSBlueprintTesting")
 	void FindSessions();
 	void OnFindSessionsComplete(bool bWasSuccessful);
 	TSharedPtr<FOnlineSessionSearch> SearchSettings;
-	
+	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+
 protected:
 	class IOnlineSubsystem* OnlineSubsystem;
 
