@@ -51,7 +51,7 @@ if(SessionName == "")
 				SessionSettings.bUseLobbiesIfAvailable = true;
 				SessionSettings.bUseLobbiesVoiceChatIfAvailable = false;
 				
-				SessionSettings.Set(SEARCH_KEYWORDS, SessionName,EOnlineDataAdvertisementType::ViaOnlineService);
+				SessionSettings.Set(SEARCH_KEYWORDS, MySessionName.ToString(),EOnlineDataAdvertisementType::ViaOnlineService);
 
 			
 				SessionPtr->OnCreateSessionCompleteDelegates.AddUObject(this,&UEOSGameInstance::OnCreateSessionsComplete);
@@ -199,7 +199,7 @@ void UEOSGameInstance::FindSessions()
 			{
 
 				SearchSettings = MakeShareable(new FOnlineSessionSearch());
-				SearchSettings->QuerySettings.Set(SEARCH_KEYWORDS,FString("tmp"), EOnlineComparisonOp::Equals);
+				SearchSettings->QuerySettings.Set(SEARCH_KEYWORDS,FString(MySessionName.ToString()), EOnlineComparisonOp::Equals);
 				SearchSettings->QuerySettings.Set(SEARCH_LOBBIES,true, EOnlineComparisonOp::Equals);
 				SearchSettings->MaxSearchResults = 50;
 
@@ -226,7 +226,7 @@ void UEOSGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 				if(SearchSettings->SearchResults.Num())
 				{
 					SessionPtr->OnJoinSessionCompleteDelegates.AddUObject(this,&UEOSGameInstance::OnJoinSessionComplete);
-					SessionPtr->JoinSession(0,FName("KidsPlaySession"),SearchSettings->SearchResults[0]);
+					SessionPtr->JoinSession(0,MySessionName,SearchSettings->SearchResults[0]);
 
 				}
 			}
