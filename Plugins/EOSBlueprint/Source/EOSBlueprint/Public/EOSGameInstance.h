@@ -18,7 +18,7 @@ class EOSBLUEPRINT_API UEOSGameInstance : public UGameInstance
 public:
 	UEOSGameInstance();
 	virtual void Init() override;
-	UFUNCTION(BlueprintCallable, DisplayName="Initalise Online Session")
+	UFUNCTION(BlueprintCallable, DisplayName="Initalise Online Session", meta=(Keywords="EOSBlueprint sample test testing"), Category="EOSBlueprintTesting")
 	void CreateSession();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, meta=(Keywords="EOSBlueprint sample test testing"), Category="EOSBlueprintTesting")
@@ -34,7 +34,10 @@ public:
 	void LonginReattempt();
 
 	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
+
+	void OnOnlineStatusChange(int Success);
 	
+	UFUNCTION(BlueprintCallable, DisplayName="Login", meta=(Keywords="EOSBlueprint sample test testing"), Category="EOSBlueprintTesting")
 	void Login();
 	
 	void OnCreateSessionsComplete(FName SessionName, bool bWasSuccessful);
@@ -44,6 +47,10 @@ public:
 	UFUNCTION(BlueprintPure, meta=(Keywords="EOSBlueprint sample test testing"), Category="EOSBlueprintTesting")
 	FString LocalPlayerName();
 
+
+	UFUNCTION(BlueprintImplementableEvent,DisplayName="Logged into EOS", meta=(Keywords="EOSBlueprint sample test testing"), Category="EOSBlueprintTesting")
+	void LoggedIntoEOS();
+	
 UFUNCTION(BlueprintCallable, Category="EOSBlueprintTesting")
 	void FindSessions();
 	void OnFindSessionsComplete(bool bWasSuccessful);

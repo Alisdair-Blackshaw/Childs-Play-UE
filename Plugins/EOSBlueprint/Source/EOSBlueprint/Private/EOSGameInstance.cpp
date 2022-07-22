@@ -17,20 +17,20 @@ const FName MySessionName = FName("KidsPlaySession");
 
 UEOSGameInstance::UEOSGameInstance()
 {
-	bIsLoggedIn = false;
+	bIsLoggedIn = 0;
 }
 
 void UEOSGameInstance::Init()
 {
 	Super::Init();
-	bIsLoggedIn = false;
 	OnlineSubsystem = IOnlineSubsystem::Get();
-	Login();
+	//Login();
+	this->LoggedIntoEOS();
 }
 
 void UEOSGameInstance::CreateSession()
 {
-	if( bIsLoggedIn)
+	if( bIsLoggedIn == 1)
 	{
 		if(OnlineSubsystem)
 		{
@@ -117,6 +117,12 @@ void UEOSGameInstance::OnDestroySessionComplete(FName SessionName, bool bWasSucc
 	}
 }
 
+void UEOSGameInstance::OnOnlineStatusChange(int Success)
+{
+	bIsLoggedIn = Success;
+	UE_LOG(LogTemp, Warning, TEXT("Online status changed, they IsLoggedIn is now: %d"), bIsLoggedIn);
+}
+
 
 void UEOSGameInstance::Login()
 {
@@ -129,6 +135,7 @@ void UEOSGameInstance::Login()
 			Credentials.Token= FString();
 			Credentials.Type = FString("accountportal");
 
+			Identity->OnLoginChangedDelegates.AddUObject(this,&UEOSGameInstance::OnOnlineStatusChange);
 			Identity->OnLoginCompleteDelegates->AddUObject(this,&UEOSGameInstance::OnLoginComplete);
 			Identity->Login(0, Credentials);
 		}
@@ -138,15 +145,18 @@ void UEOSGameInstance::Login()
 void UEOSGameInstance::OnLoginComplete(int32 LocalUserNum, bool bWasSuccessful, const FUniqueNetId& UserID,
 	const FString& Error)
 {
-	bIsLoggedIn = 1;
+	bIsLoggedIn = bWasSuccessful;
 	UE_LOG(LogTemp, Warning, TEXT("Running Login Complete Delegate"));
 	UE_LOG(LogTemp, Warning, TEXT("LoggedIn: %d"), bWasSuccessful);
+	UE_LOG(LogTemp, Warning, TEXT("LoggedIn internal value: %d"), bIsLoggedIn);
+
 
 	//LocalPlayerName = BasicProfile
 	if(OnlineSubsystem)
 	{
 		if(IOnlineIdentityPtr Identity = OnlineSubsystem->GetIdentityInterface())
 		{
+			LoggedIntoEOS();
 			Identity->ClearOnLoginCompleteDelegates(0, this);
 		}
 		//CreateSession("Just Waiting");
@@ -158,7 +168,7 @@ void UEOSGameInstance::OnLoginComplete(int32 LocalUserNum, bool bWasSuccessful, 
 
 void UEOSGameInstance::OnCreateSessionsComplete(FName SessionName, bool bWasSuccessful)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Success: %d"), bWasSuccessful);
+	UE_LOG(LogTemp, Warning, TEXT("Create Sessuibs Cinokete Success: %d"), bWasSuccessful);
 
 	OnlineSubsystem = IOnlineSubsystem::Get();
 	if(OnlineSubsystem)
@@ -187,13 +197,13 @@ FString UEOSGameInstance::LocalPlayerName()
 
 void UEOSGameInstance::FindSessions()
 {
-	if( bIsLoggedIn)
+	if(bIsLoggedIn)
 	{
 		if(OnlineSubsystem)
 		{
 			if(IOnlineSessionPtr SessionPtr = OnlineSubsystem-> GetSessionInterface())
 			{
-
+				UE_LOG(LogTemp, Warning, TEXT("Finding Sessions"));
 				SearchSettings = MakeShareable(new FOnlineSessionSearch());
 				SearchSettings->QuerySettings.Set(SEARCH_KEYWORDS,FString(MySessionName.ToString()), EOnlineComparisonOp::Equals);
 				SearchSettings->QuerySettings.Set(SEARCH_LOBBIES,true, EOnlineComparisonOp::Equals);
@@ -210,7 +220,7 @@ void UEOSGameInstance::FindSessions()
 
 void UEOSGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Success: %d"), bWasSuccessful);
+	UE_LOG(LogTemp, Warning, TEXT("Finding Sessions has finished, results were: %d"), bWasSuccessful);
 
 	if(bWasSuccessful)
 	{

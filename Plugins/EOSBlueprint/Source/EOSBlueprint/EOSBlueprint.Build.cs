@@ -25,9 +25,9 @@ public class EOSBlueprint : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
-				"OnlineSubsystem",
-				"OnlineSubsystemEOS"
+				  "Core"
+				,"OnlineSubsystem"
+				,"OnlineSubsystemEOS"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -36,10 +36,11 @@ public class EOSBlueprint : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore", "EOSSDK",
+				  "CoreUObject"
+				, "Engine"
+				, "Slate"
+				, "SlateCore"
+				, "EOSSDK",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
@@ -48,6 +49,8 @@ public class EOSBlueprint : ModuleRules
 		DynamicallyLoadedModuleNames.AddRange(
 			new string[]
 			{
+				//"OnlineSubsystem"
+				//, "OnlineSubsystemEOS"
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
