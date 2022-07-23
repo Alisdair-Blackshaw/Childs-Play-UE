@@ -3,6 +3,8 @@
 
 #include "EOSGameInstance.h"
 
+#include <eos_sessions.h>
+
 
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
@@ -41,7 +43,7 @@ void UEOSGameInstance::CreateSession()
 				SessionSettings.bShouldAdvertise = true;
 				SessionSettings.bIsLANMatch = false;
 				SessionSettings.NumPublicConnections = 5;
-				SessionSettings.bAllowJoinInProgress = false;
+				SessionSettings.bAllowJoinInProgress = true;
 				SessionSettings.bAllowJoinViaPresence = true;
 				SessionSettings.bUsesPresence = true;
 				SessionSettings.bUseLobbiesIfAvailable = true;
@@ -195,6 +197,18 @@ FString UEOSGameInstance::LocalPlayerName()
 	return "NULL";
 }
 
+void UEOSGameInstance::EOS_Sessions_UpdateSessionModification(EOS_HSessionModification Handle)
+{
+	
+}
+
+void UEOSGameInstance::CloseSession()
+{
+	//todo: close session for other players
+	//FOnlineSessionSettings SessionSettings;
+	//EOS_Sessions_UpdateSessionModification(*new EOS_HSessionModification);
+}
+
 void UEOSGameInstance::FindSessions()
 {
 	if(bIsLoggedIn)
@@ -205,6 +219,7 @@ void UEOSGameInstance::FindSessions()
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Finding Sessions"));
 				SearchSettings = MakeShareable(new FOnlineSessionSearch());
+				SearchSettings->QuerySettings.SearchParams.Empty();
 				SearchSettings->QuerySettings.Set(SEARCH_KEYWORDS,FString(MySessionName.ToString()), EOnlineComparisonOp::Equals);
 				SearchSettings->QuerySettings.Set(SEARCH_LOBBIES,true, EOnlineComparisonOp::Equals);
 				SearchSettings->MaxSearchResults = 50;
@@ -224,7 +239,7 @@ void UEOSGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 
 	if(bWasSuccessful)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Found %d  Lobbies"), SearchSettings->SearchResults.Num());
+		UE_LOG(LogTemp, Warning, TEXT("Found %d  Lobbie(s)"), SearchSettings->SearchResults.Num());
 		if(OnlineSubsystem)
 		{
 			if(IOnlineSessionPtr SessionPtr = OnlineSubsystem-> GetSessionInterface())

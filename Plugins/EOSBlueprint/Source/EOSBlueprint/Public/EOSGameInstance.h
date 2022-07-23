@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <eos_sessions_types.h>
+
 #include "CoreMinimal.h"
 #include "OnlineSubsystem.h"
 #include "Engine/GameInstance.h"
@@ -48,6 +50,10 @@ public:
 	FString LocalPlayerName();
 
 
+	void EOS_Sessions_UpdateSessionModification(EOS_HSessionModification Handle);
+	UFUNCTION(BlueprintCallable, meta=(Keywords="EOSBlueprint sample test testing"), Category="EOSBlueprintTesting")
+	void CloseSession();
+	
 	UFUNCTION(BlueprintImplementableEvent,DisplayName="Logged into EOS", meta=(Keywords="EOSBlueprint sample test testing"), Category="EOSBlueprintTesting")
 	void LoggedIntoEOS();
 	
