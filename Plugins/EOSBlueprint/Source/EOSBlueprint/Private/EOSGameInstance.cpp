@@ -3,11 +3,14 @@
 
 #include "EOSGameInstance.h"
 
+#include <eos_auth.h>
+#include <eos_connect.h>
 #include <eos_sessions.h>
 
 
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
+#include "OnlineSubsystemEOS.h" 
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
 #include "Interfaces/OnlineIdentityInterface.h"
@@ -25,7 +28,7 @@ UEOSGameInstance::UEOSGameInstance()
 void UEOSGameInstance::Init()
 {
 	Super::Init();
-	OnlineSubsystem = IOnlineSubsystem::Get();
+	OnlineSubsystem = FOnlineSubsystemEOS::Get();
 	//Login();
 	this->LoggedIntoEOS();
 }
@@ -70,6 +73,13 @@ void UEOSGameInstance::FinishedLoggingIn_Implementation()
 void UEOSGameInstance::LoginCheck(int& isLoggedIn)
 {
 
+	if(IOnlineSessionPtr SessionPtr = OnlineSubsystem-> GetSessionInterface())
+	{
+		IOnlineSessionPtr testvar = OnlineSubsystem ->GetSessionInterface();
+		//UE_LOG(LogTemp, Error, TEXT("The Session interface is %d"), testvar);
+
+	}
+	
 	//EOS_Auth_GetLoginStatus(,0)
 	UE_LOG(LogTemp, Warning, TEXT("isLoggedInEquals: %d"), isLoggedIn);
 

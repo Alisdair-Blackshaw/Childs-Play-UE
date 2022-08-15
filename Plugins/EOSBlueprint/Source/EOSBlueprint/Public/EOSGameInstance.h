@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <eos_auth_types.h>
 #include <eos_sessions_types.h>
 
 #include "CoreMinimal.h"
@@ -67,4 +68,5 @@ protected:
 	class IOnlineSubsystem* OnlineSubsystem;
 
 	int bIsLoggedIn;
+	EOS_ELoginStatus CurrentLoginStatus;
 };
